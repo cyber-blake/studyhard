@@ -6,8 +6,7 @@ s = 'Day, mice. "Year" is a mistake!'
 # s = input()
 result = ''
 shift = 0
-# 65 < x < 91 - eng капс
-# 97 < x < 123 - eng строчные
+
 
 s_new = s.split()
 
