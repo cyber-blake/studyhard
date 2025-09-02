@@ -1,19 +1,24 @@
 # * 15.5 шифр цезаря
+"""
+- разбиваем по пробелу на слова
+- проходим циклом по каждому слову, вложенным циклом по символу слова, заменяем на символы со сдвигом
+- 
+"""
 import string
 s = 'Day, mice. "Year" is a mistake!'
 # s = input()
 result = []
-words = s.split() # ? разбили по пробелу на слова с знаками препинания
+words = s.split() # * разбили по пробелl на слова с знаками препинания
 
-for word in words:
+for word in words: # цикл по словам 
     new_word = ''
     shift = sum(1 for char in word if char.isalpha())
-    for symb in word:
-        if symb in string.ascii_letters:
-            new_symb = chr(ord(symb)+shift) # ? доделать через джоин
-            # нужно сохранить пунктуацию
+    for symbol in word: # цикл по символам в слове
+        if symbol in string.ascii_letters:
+            new_symb = chr(ord(symbol)+shift) # * доделать через джоин
+            # ! нужно сохранить пунктуацию
             new_word += new_symb
     result.append(new_word)
-# ? сделать циклический сдвиг
+# ! сделать циклический сдвиг
 
 print(result)
