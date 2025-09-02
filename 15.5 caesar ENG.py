@@ -11,6 +11,7 @@ for word in words:
     for symb in word:
         if symb in string.ascii_letters:
             new_symb = chr(ord(symb)+shift) # доделать через джоин
+            # нужно сохранить пунктуацию
             new_word += new_symb
         result.append(new_word)
 # сделать циклический сдвиг
