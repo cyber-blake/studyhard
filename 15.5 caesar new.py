@@ -20,7 +20,10 @@ def shift(str):
     return shift_arr
 
 my_iter = iter(shift(s))
-for word in s.split():
+
+for word in s.split(): 
+#  проблема в том, что разбивает на слова через пробел, иначе не сможет для каждого слова получать смещение
+
     shift = next(my_iter)
     for symb in word:
         if symb in string.ascii_letters:

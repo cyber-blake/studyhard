@@ -7,18 +7,16 @@
 import string
 s = 'Day, mice. "Year" is a mistake!'
 # s = input()
-result = []
 words = s.split() # * разбили по пробелl на слова с знаками препинания
 
 for word in words: # цикл по словам 
-    new_word = ''
     shift = sum(1 for char in word if char.isalpha())
     for symbol in word: # цикл по символам в слове
         if symbol in string.ascii_letters:
-            new_symb = chr(ord(symbol)+shift) # * доделать через джоин
+            result += chr(ord(symbol)+shift) # * доделать через джоин
             # ! нужно сохранить пунктуацию
-            new_word += new_symb
-    result.append(new_word)
+        else:
+            result += symbol
 # ! сделать циклический сдвиг
 
 print(result)
