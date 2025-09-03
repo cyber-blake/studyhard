@@ -19,8 +19,8 @@ def shift(str):
         shift_int = shift_arr.append(sum(1 for char in word if char.isalpha()))
     return shift_arr
 
+my_iter = iter(shift(s))
 for word in s.split():
-    my_iter = iter(shift(s))
     shift = next(my_iter)
     for symb in word:
         if symb in string.ascii_letters:
