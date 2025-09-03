@@ -11,4 +11,5 @@ for symb in s:
         result += chr(ord(symb)+shift)
     else:
         result += symb
+    # ! нет цикл сдвига
 print(result)
