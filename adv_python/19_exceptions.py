@@ -13,35 +13,20 @@ def calc(str):
 
 
 # * 2
-def check(*args):
+def filter_hex_string(string):
     try:
-        x = filter(lambda x: int(x, 16), args)
-        return x
-    except ValueError:
-        return "this cannot"
-    except TypeError:
-        pass
-
-
-# print(list(check("abc", "asd", "opj")))
-# x = ("abc", "asd", "opj")
-# for each in x:
-#     if int(x, 16):
-#         print(x)
-
-numbers = range(11)
-
-
-# функция, которая проверяет числа
-def filter_odd_num(in_num):
-    if (in_num % 2) == 0:
+        int(string, 16)
         return True
-    else:
+    except ValueError:
         return False
 
 
-# Применение filter() для удаления нечетных чисел
-out_filter = filter(filter_odd_num, numbers)
+# задача: чтобы в список попадали те строки, которые проходят фильтр
+# для этого нужно подать список строк, -> разбив одну строку через пробел
+def check_password(*args):
+    args = list(args)
+    args = args.split()
+    return filter(filter_hex_string, args)
 
-print("Тип объекта out_filter: ", type(out_filter))
-print("Отфильтрованный список: ", list(out_filter))
+
+print(list(check_password(input())))
