@@ -6,10 +6,13 @@
 - добавляет в резалт
 """
 import string
+
 s = 'Day, mice. "Year" is a mistake!'
 # s = input()
-result = ''
-def shift(str): 
+result = ""
+
+
+def shift(str):
     """
     получает на ввод строку, разбивает и
     возвращает массив текстовых смещений (int)
@@ -19,16 +22,17 @@ def shift(str):
         shift_int = shift_arr.append(sum(1 for char in word if char.isalpha()))
     return shift_arr
 
+
 my_iter = iter(shift(s))
 
-for word in s.split(): 
-#  проблема в том, что разбивает на слова через пробел, иначе не сможет для каждого слова получать смещение
+for word in s.split():
+    #  проблема в том, что разбивает на слова через пробел, иначе не сможет для каждого слова получать смещение
 
     shift = next(my_iter)
     for symb in word:
         if symb in string.ascii_letters:
-            result += chr(ord(symb)+shift)
+            result += chr(ord(symb) + shift)
         else:
             result += symb
-        
+
 print(result)
