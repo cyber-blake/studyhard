@@ -5,10 +5,7 @@
 - смещение берем из нарезаного списка слов без пунктуации
 - добавляет в резалт
 """
-import string
-
-s = 'Day, mice. "Year" is a mistake!'
-# s = input()
+s = input()
 result = ""
 
 
@@ -20,19 +17,23 @@ def shift(str):
     shift_arr = []
     for word in str.split():
         shift_int = shift_arr.append(sum(1 for char in word if char.isalpha()))
+        # список смещений пословно
     return shift_arr
 
 
 my_iter = iter(shift(s))
-
-for word in s.split():
-    #  проблема в том, что разбивает на слова через пробел, иначе не сможет для каждого слова получать смещение
-
+words = s.split()
+words_new = []
+for word in words:
     shift = next(my_iter)
-    for symb in word:
-        if symb in string.ascii_letters:
-            result += chr(ord(symb) + shift)
+    new_word = ""
+    for char in word:
+        if char.isalpha():
+            base = ord("a") if char.islower() else ord("A")
+            new_word += chr((ord(char) - base + shift) % 26 + base)
         else:
-            result += symb
+            new_word += char
+    words_new.append(new_word)
 
-print(result)
+
+print(" ".join(words_new))
