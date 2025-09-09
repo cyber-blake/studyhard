@@ -9,7 +9,7 @@ def calc(str):
         return "ERROR"
 
 
-# print(calc(input()))
+print(calc(input()))
 
 
 # * 2
@@ -51,14 +51,159 @@ olympiad2 = {
     },
 }
 
-for x, y in olympiad1.items():
-    print(x, y)
 
-# Проход по всем уровням
-for key, value in olympiad1.items():
-    if isinstance(value, dict):
-        print(f"{key}:")
-        for sub_key, sub_value in value.items():
-            print(f"  {sub_key}: {sub_value}")
-    else:
-        print(f"{key}: {value}")
+def checkOlympiads(name):
+    try:
+        points1 = olympiad1["winners"][name]
+        print(f'[{olympiad1["name"]}] победитель {points1}')
+    except KeyError:
+        print(f'[{olympiad1["name"]}] призёр')
+    finally:
+        print()
+    try:
+        points2 = olympiad2["winners"][name][4]
+        print(f"[{olympiad2['name']}] победитель {points2}")
+    except IndexError:
+        print(f"[{olympiad2['name']}] победитель")
+    except KeyError:
+        print(f"[{olympiad2['name']}] призёр")
+    finally:
+        print()
+
+
+checkOlympiads("Ольга Олимпиадникова")
+checkOlympiads("Олеся Олимпиадникова")
+
+
+# *4
+def terribly_impolite_program():
+    try:
+        while True:
+            pass
+    except KeyboardInterrupt:
+        print("Ты не пройдёшь!")
+        terribly_impolite_program()
+
+
+terribly_impolite_program()
+
+
+# * 5
+class LizardInGlassError(Exception):
+    """Исключение для ящерицы в стакане"""
+
+    pass
+
+
+class ToiletQuestionError(Exception):
+    """Исключение для вопроса о туалете"""
+
+    pass
+
+
+class BarOnFireError(Exception):
+    """Исключение для возгорания бара"""
+
+    pass
+
+
+class NegativeOrderError(Exception):
+    """Исключение для отрицательного заказа"""
+
+    pass
+
+
+def process_order(order):
+    """Обрабатывает заказ в баре"""
+
+    try:
+        # Проверяем специальные случаи
+        if "ящериц" in order.lower() or "lizard" in order.lower():
+            raise LizardInGlassError("Мы не подаем ящериц в стакане!")
+
+        if "туалет" in order.lower() or "toilet" in order.lower():
+            raise ToiletQuestionError("Клиент спрашивает про туалет!")
+
+        if "qwerty" in order.lower():
+            raise ValueError("Некорректный заказ: qwerty")
+
+        # Извлекаем количество из заказа
+        import re
+
+        match = re.search(r"(-?\d+)", order)
+
+        if match:
+            quantity = int(match.group(1))
+
+            # Проверяем отрицательное количество
+            if quantity < 0:
+                raise NegativeOrderError("Нельзя заказать отрицательное количество!")
+
+            # Проверяем разумные пределы
+            assert quantity <= 1000, f"Слишком большой заказ: {quantity} кружек"
+            assert quantity >= 0, "Количество не может быть отрицательным"
+
+            return f"Приготовлено {quantity} кружек лимонада"
+
+        else:
+            raise ValueError("Не могу распознать количество в заказе")
+
+    except LizardInGlassError as e:
+        return f"Ошибка: {e}"
+
+    except NegativeOrderError as e:
+        return f"Ошибка: {e}"
+
+    except ToiletQuestionError:
+        # Это вызовет пожар в finally блоке
+        raise BarOnFireError("Бар вспыхивает пламенем от вопроса о туалете!")
+
+    except ValueError as e:
+        return f"Ошибка заказа: {e}"
+
+    except AssertionError as e:
+        return f"Недопустимый заказ: {e}"
+
+    finally:
+        print(f"Обработан заказ: '{order}'")
+
+
+def bar_scenario():
+    """Сценарий из анекдота"""
+
+    orders = [
+        "кружку лимонада",
+        "2 кружки лимонада",
+        "0 кружек лимонада",
+        "999999999 кружек лимонада",
+        "ящерицу в стакане",
+        "-1 кружку лимонада",
+        "qwerty кружек лимонада",
+    ]
+
+    print("Тестировщик заходит в бар и заказывает:\n")
+
+    for order in orders:
+        try:
+            result = process_order(order)
+            print(f"✓ {result}")
+        except BarOnFireError as e:
+            print(f"🔥 {e}")
+            break
+        except Exception as e:
+            print(f"✗ Неожиданная ошибка: {e}")
+        print()
+
+    # Первый реальный клиент
+    print("Первый реальный клиент заходит в бар:")
+    try:
+        process_order("где туалет")
+    except BarOnFireError as e:
+        print(f"🔥 {e}")
+    finally:
+        print("Сценарий завершен!")
+
+
+# Запуск сценария
+if __name__ == "__main__":
+    bar_scenario()
