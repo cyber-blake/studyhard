@@ -4,7 +4,7 @@ def sum_numbers(*args):
     return sum(args)
 
 
-# print(sum_numbers(1, 2, 3))
+print(sum_numbers(1, 2, 3))
 
 
 # * 2
@@ -13,7 +13,7 @@ def print_kwargs(**kwargs):
         print(f"{key}: {value}")
 
 
-# print_kwargs(name="Alice", age=25, country="USA")
+print_kwargs(name="Alice", age=25, country="USA")
 
 # * 3
 
@@ -58,9 +58,9 @@ def calculate_total_price(price, **kwargs):
     return price * (100 - vals) / 100
 
 
-# print(calculate_total_price(100, student=10, coupon=20))  # 70.0
-# print(calculate_total_price(200, holiday=25))  # 150.0
-# print(calculate_total_price(500))
+print(calculate_total_price(100, student=10, coupon=20))  # 70.0
+print(calculate_total_price(200, holiday=25))  # 150.0
+print(calculate_total_price(500))
 
 
 # * 5

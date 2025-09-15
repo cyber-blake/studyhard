@@ -6,6 +6,8 @@ def greet(first, *args):
     return f"Hello, {first}!"
 
 
+# {'and '+args(next)}
+# Hello, Timur and Roman and Ruslan!
 #  ? задача - распаковать аргументы args,
 
 print(greet("Timur"))
