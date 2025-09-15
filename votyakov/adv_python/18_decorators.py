@@ -3,6 +3,17 @@
 from functools import cache
 
 
+def logging(func):
+
+    def inside(*args, **kwargs):
+        with open("output.txt", "w") as f:
+            print(*args, **kwargs, file=f)
+        print(f"Логи функции {func.__name__} были записаны в файл output.txt")
+        return
+
+    return inside
+
+
 def timer(func):
     import time
 
@@ -16,6 +27,7 @@ def timer(func):
     return inside
 
 
+@logging
 @timer
 def fib(x):
     if x <= 1:
@@ -30,6 +42,7 @@ for n in range(19):
 
 
 @timer
+@logging
 def quarter(x):
     s = 0
     for i in range(x):
@@ -38,3 +51,15 @@ def quarter(x):
 
 
 print(quarter(1000))
+
+
+# * 3
+def logging(func):
+
+    def inside(*args, **kwargs):
+        with open("output.txt", "a") as f:
+            print(*args, **kwargs, file=f)
+        print(f"Логи функции {func.__name__} были записаны в файл output.txt")
+        return
+
+    return inside
