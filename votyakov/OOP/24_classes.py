@@ -59,15 +59,15 @@ class CoffeeMachine:
             print("Недостаточно ингридиентов! :(")
 
 
-# braun = CoffeeMachine(200, 10, 50)
-# braun.show_resources()
-# braun.add_coffee(20)
-# braun.add_cups(10)
-# braun.add_sugar(100)
-# braun.add_milk(500)
-# braun.show_resources()
-# braun.make_coffee()
-# braun.make_coffee()
+braun = CoffeeMachine(200, 10, 50)
+braun.show_resources()
+braun.add_coffee(20)
+braun.add_cups(10)
+braun.add_sugar(100)
+braun.add_milk(500)
+braun.show_resources()
+braun.make_coffee()
+braun.make_coffee()
 
 
 # * 2
@@ -139,69 +139,129 @@ class PhotoCamera:
         self.photo_count = 0
         print("Фото удалены")
 
+        Cam1 = PhotoCamera("Сanon", "077D", (1920, 1080), 2)
+        print(Cam1.get_camera_info())
+        print(Cam1.is_camera_on())
+        Cam1.turn_on()
+        Cam1.take_photo()
+        Cam1.take_photo()
+        Cam1.take_photo()
+        Cam1.store_photo()
+        Cam1.store_photo()
+        Cam1.view_photos()
+        Cam1.clear_memory()
+        Cam1.turn_off()
 
-# Cam1 = PhotoCamera("Сanon", "077D", (1920, 1080), 2)
-# print(Cam1.get_camera_info())
-# print(Cam1.is_camera_on())
-# Cam1.turn_on()
-# Cam1.take_photo()
-# Cam1.take_photo()
-# Cam1.take_photo()
-# Cam1.store_photo()
-# Cam1.store_photo()
-# Cam1.view_photos()
-# Cam1.clear_memory()
-# Cam1.turn_off()
+        # ?_____________________________________________________________
 
-# ?_____________________________________________________________
+        # * 3
 
 
-# * 3
+from itertools import cycle
+
+
 class Revolver:
     def __init__(self):
-        from itertools import cycle
 
         self.MAX_CAPACITY = 6
         non_tuple = list(range(1, 7))
         self.slots = dict.fromkeys(non_tuple, None)  # словарь 1: None, 2: None, etc
-        self.slots_cycle = cycle(self.slots)
-        self.slot_pointer = 1
+        self.slots_cycle = cycle(self.slots)  # циклический итератор словаря slots
+        self.firing_pointer = (
+            1  # указатель на слот готовый к выстрелу (ключ словаря слотс)
+        )
+
+    def debug(self):
+        print()
+        print("DEBUG:")
         print(type(self.slots))
         print(type(self.slots_cycle))
-        print(type(self.slot_pointer))
+        print(self.slots[self.firing_pointer])
+        print("END OF DEBUG")
+
+    def next_slot(self):
+        self.firing_pointer = next(self.slots_cycle)
 
     def show_baraban(self):
         print(self.slots)
 
     def add_bullet(self, bullet):
-        self.slots[self.slot_pointer] = bullet
+        self.slots[self.firing_pointer] = bullet
+        self.next_slot()
 
-    def add_bullets_from_list(self, list):
-        if len(list) <= self.MAX_CAPACITY:
-            ...
+    def add_bullets_from_list(self, bullet_list):
+        if not bullet_list:  # если список пустой
+            return False
+
+        added_count = 0
+        for bullet in bullet_list:
+            if self.bullet_count() >= self.MAX_CAPACITY:
+                break  # барабан полон
+            if self.slots[self.firing_pointer] is None:  # если слот пустой
+                self.slots[self.firing_pointer] = bullet
+                added_count += 1
+                self.next_slot()
+
+        return added_count > 0  # True если добавили хотя бы один патрон
 
     def shoot(self):
-        if self.slot_pointer != None:
+        if self.slots[self.firing_pointer] != None:
             print("BANG!!!")
-            next(self.slots_cycle)
+            self.slots[self.firing_pointer] = None
+            self.next_slot()
+
         else:
+            self.next_slot()
+            print("Кчиньк... В стволе пусто.")
             return None
 
-    # def unload(self, all_items=False):
+    def unload(self, all_items=False):
+        if all_items:
+            # Извлекаем все патроны
+            bullets = []
+            for slot_num in range(1, self.MAX_CAPACITY + 1):
+                if self.slots[slot_num] is not None:
+                    bullets.append(self.slots[slot_num])
+                    self.slots[slot_num] = None
+            return bullets if bullets else None
+        else:
+            # Извлекаем только текущий патрон
+            current_bullet = self.slots[self.firing_pointer]
+            self.slots[self.firing_pointer] = None
+            return current_bullet
 
     def scroll(self):
         import random
 
         self.slot_pointer = random.randint(1, 6)
-        print("Крутите барабан! Буква А! (барабан покручен)")
-        print(self.slot_pointer)
+        print("Крутите барабан! (барабан покручен)")
 
-    # def bullet_count(self):
-
-
-# * play russian roulette
+    def bullet_count(self):
+        count = sum(1 for value in self.slots.values() if value is not None)
+        return count
 
 
 r1 = Revolver()
+r1.shoot()
+r1.add_bullet("9mm")
+r1.add_bullet("10mm")
+r1.add_bullet("7.62")
+r1.add_bullet(".357")
 r1.show_baraban()
 r1.scroll()
+r1.shoot()
+r1.shoot()
+r1.shoot()
+r1.shoot()
+r1.show_baraban()
+
+bullets = ["патрон1", "патрон2", "патрон3"]
+result = r1.add_bullets_from_list(bullets)
+print(r1.show_baraban())
+
+all_bullets = r1.unload(all_items=True)
+print(f"Извлечены все патроны: {all_bullets}")
+
+# Пытаемся добавить из пустого списка
+empty_result = r1.add_bullets_from_list([])
+print(f"Пустой список: {empty_result}")
