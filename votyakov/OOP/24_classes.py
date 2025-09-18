@@ -190,19 +190,19 @@ class Revolver:
         self.next_slot()
 
     def add_bullets_from_list(self, bullet_list):
-        if not bullet_list:  # если список пустой
+        if not bullet_list:
             return False
 
         added_count = 0
         for bullet in bullet_list:
             if self.bullet_count() >= self.MAX_CAPACITY:
-                break  # барабан полон
-            if self.slots[self.firing_pointer] is None:  # если слот пустой
+                break
+            if self.slots[self.firing_pointer] is None:
                 self.slots[self.firing_pointer] = bullet
                 added_count += 1
                 self.next_slot()
 
-        return added_count > 0  # True если добавили хотя бы один патрон
+        return added_count > 0
 
     def shoot(self):
         if self.slots[self.firing_pointer] != None:
@@ -217,7 +217,6 @@ class Revolver:
 
     def unload(self, all_items=False):
         if all_items:
-            # Извлекаем все патроны
             bullets = []
             for slot_num in range(1, self.MAX_CAPACITY + 1):
                 if self.slots[slot_num] is not None:
@@ -225,7 +224,6 @@ class Revolver:
                     self.slots[slot_num] = None
             return bullets if bullets else None
         else:
-            # Извлекаем только текущий патрон
             current_bullet = self.slots[self.firing_pointer]
             self.slots[self.firing_pointer] = None
             return current_bullet
@@ -262,6 +260,5 @@ print(r1.show_baraban())
 all_bullets = r1.unload(all_items=True)
 print(f"Извлечены все патроны: {all_bullets}")
 
-# Пытаемся добавить из пустого списка
 empty_result = r1.add_bullets_from_list([])
 print(f"Пустой список: {empty_result}")
