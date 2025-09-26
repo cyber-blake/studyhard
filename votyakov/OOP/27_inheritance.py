@@ -180,40 +180,111 @@ class BankOperation(BankAccount):
         print(*self.op_history, sep="\n")
 
 
-account = BankOperation("Warren Buffett", 113000000000, 0.08)
-account.__str__()
-account.deposit(4000000000)
-account.withdraw(88000000000)
-account.add_interest()
-account.history()
-print(account)
+# account = BankOperation("Warren Buffett", 113000000000, 0.08)
+# account.__str__()
+# account.deposit(4000000000)
+# account.withdraw(88000000000)
+# account.add_interest()
+# account.history()
+# print(account)
+# ! раскодировать перед сдачей
+
 
 # * 4
 class ComputerDevice:
-    '''Request process'''
+    """Request process"""
+
     def __init__(self, inf):
-        print('Start init ComputerDevice.__init__()')
+        print("Start init ComputerDevice.__init__()")
         self.inf = inf
-        print('End init ComputerDevice.__init__()')
+        print("End init ComputerDevice.__init__()")
+
+
 class Scanner(ComputerDevice):
-    '''Scan information'''
+    """Scan information"""
+
     def __init__(self, inf):
-        print('Start init Scanner.__init__()')
+        print("Start init Scanner.__init__()")
         super().__init__(inf)
-        print('End init Scanner.__init__()')
+        print("End init Scanner.__init__()")
+
+
 class Printer(ComputerDevice):
-    '''Print information'''
+    """Print information"""
+
     def __init__(self, inf):
-        print('Start init Printer.__init__()')
+        print("Start init Printer.__init__()")
         super().__init__(inf)
-        print('End init Printer.__init__()')
-    class Copier(Scanner, Printer):
-    '''Copy process'''
+        print("End init Printer.__init__()")
+
+
+class Copier(Scanner, Printer):
+    """Copy process"""
+
     def __init__(self, inf):
-        print('Start init Copier.__init__()')
+        print("Start init Copier.__init__()")
         super().__init__(inf)
-        print(f'Отсканированная информация: {self.inf.upper()}')
-        print('End init Copier.__init__()')
+        print(f"Отсканированная информация: {self.inf.upper()}")
+        print("End init Copier.__init__()")
         print(Copier.__mro__)
 
-c = Copier('Hello world!')
+
+# c = Copier("Hello world!")
+
+# ? 1. Почему каждый метод `__init__` вызывался только один раз?
+# * Потому что цепочка вызовов МРО такова: Copier.__init__() → Scanner.__init__() → Printer.__init__() → ComputerDevice.__init__()
+# ? 2. Почему каждый метод `__init__` был запущен до того, как любой из других был завершен?
+# *  потому что иниты вызываются вложенно, и ждут пока инициализируется родительский класс, потом уже начинает выполняться тело функции или класса
+
+
+# * 4
+class Investments:
+    """конструктор, инициализирующий атрибуты ценных бумаг: `ticker`, `price`,
+    `currency`, `industry` (тикер, цена, валюта, сектор);
+    - метод `display()` для отображения свойств"""
+
+    def __init__(self, ticker, price, currency, industry) -> None:
+        self.ticker = ticker
+        self.price = price
+        self.currency = currency
+        self.industry = industry
+
+    def display(self):
+        print(
+            f"Тикер: {self.ticker}\n"
+            f"Цена: {self.price}\n"
+            f"Валюта: {self.currency}\n"
+            f"Сектор: {self.industry}\n"
+        )
+
+
+class Shares(Investments):
+    def __init__(
+        self, ticker, price, currency, industry, dividend, echelon, profit
+    ) -> None:
+        super().__init__(ticker, price, currency, industry)
+        self.dividend = dividend
+        self.echelon = echelon
+        self.profit = profit
+
+    def buying(self): ...
+
+
+class Bonds(Investments):
+    def __init__(
+        self, ticker, price, currency, industry, coupon, echelon, nominal
+    ) -> None:
+        super().__init__(ticker, price, currency, industry)
+        self.coupon = coupon
+        self.echelon = echelon
+        self.nominal = nominal
+
+    def buying(self): ...
+
+    def buying_securities(self, func):
+        ...
+        # decorator внутри метода класса
+
+
+c1 = Investments("asd", 7236, "rub", "metalling")
+# c1.display()
