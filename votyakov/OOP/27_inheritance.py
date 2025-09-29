@@ -134,6 +134,8 @@ bento1 = BentoCake("Бенто торт", 1000, datetime(2025, 10, 20), 4, "де
 # - `add_interest()` добавляет проценты к счету на основе `interest_rate` и
 # записывает транзакцию
 # - `history()` печатает список всех операций по счету.
+
+
 class BankAccount:
     def __init__(self, holder, balance, interest_rate) -> None:
         self.__holder = holder
@@ -238,6 +240,18 @@ class Copier(Scanner, Printer):
 
 
 # * 4
+def buying_securities(method):
+    """Декоратор для проверки эшелона ценной бумаги"""
+
+    def wrapper(self, *args, **kwargs):
+        if hasattr(self, "echelon") and self.echelon == 3:
+            print("Это высокорискованная сделка.")
+
+        return method(self, *args, **kwargs)
+
+    return wrapper
+
+
 class Investments:
     """конструктор, инициализирующий атрибуты ценных бумаг: `ticker`, `price`,
     `currency`, `industry` (тикер, цена, валюта, сектор);
@@ -267,10 +281,29 @@ class Shares(Investments):
         self.echelon = echelon
         self.profit = profit
 
-    def buying(self): ...
+    def display(self):
+        print(
+            f"Тикер: {self.ticker}\n"
+            f"Цена: {self.price} {self.currency}\n"
+            f"Валюта: {self.currency}\n"
+            f"Сектор: {self.industry}\n"
+            f"Дивиденды: {self.dividend}\n"
+            f"Эшелон: {self.echelon}\n"
+            f"Годовая доходность: {self.profit}%"
+        )
+
+    @buying_securities
+    def buying(self):
+        if self.profit > 5:
+            print(
+                f"Совершена покупка на сумму: {self.price*15}. Поздравляю, Вы стали совладельцем компании!\n"
+            )
+        else:
+            print(f"❌ Покупка невозможна: доходность {self.profit}% ≤ 5%")
 
 
 class Bonds(Investments):
+
     def __init__(
         self, ticker, price, currency, industry, coupon, echelon, nominal
     ) -> None:
@@ -279,12 +312,30 @@ class Bonds(Investments):
         self.echelon = echelon
         self.nominal = nominal
 
-    def buying(self): ...
+    @buying_securities
+    def buying(self):
+        if self.price <= self.nominal:
+            print(
+                f"Совершена покупка на сумму: {self.price*15}. Поздравляю, Вы стали кредитором компании!"
+            )
+        else:
+            print(f"Покупка отменена")
 
-    def buying_securities(self, func):
-        ...
-        # decorator внутри метода класса
+    def display(self):
+        print(
+            f"Тикер: {self.ticker}\n"
+            f"Цена: {self.price} {self.currency}\n"
+            f"Валюта: {self.currency}\n"
+            f"Сектор: {self.industry}\n"
+            f"Купон: {self.coupon}\n"
+            f"Эшелон: {self.echelon}\n"
+            f"Номинал облигации: {self.nominal} {self.currency}"
+        )
 
 
-c1 = Investments("asd", 7236, "rub", "metalling")
-# c1.display()
+i1 = Shares("GAZP", 174, "RUB", "Энергетика", True, 1, 6)
+i1.display()
+i1.buying()
+i2 = Bonds("ОФЗ-26233", 688, "RUB", "Государственные", 6, 1, 1000)
+i2.display()
+i2.buying()
