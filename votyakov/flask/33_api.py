@@ -1,39 +1,38 @@
 #
 # * 1
-# from PIL import Image
-# from PIL import UnidentifiedImageError
-# from io import BytesIO
-# import requests
+from PIL import Image
+from PIL import UnidentifiedImageError
+from io import BytesIO
+import requests
 
-# url = input()
-# r = requests.get(url)
+url = input("Введите ссылку на изображение")
+r = requests.get(url)
 
-# try:
-#     r.raise_for_status()
-#     i = Image.open(BytesIO(r.content))
-#     i.save("secret_file.jpg")
-#     print("File saved")
+try:
+    r.raise_for_status()
+    i = Image.open(BytesIO(r.content))
+    i.save("secret_file.jpg")
+    print("File saved")
 
-# except requests.exceptions.HTTPError as e:
-#     # Обработка 404, 500 и других HTTP-ошибок
-#     print(
-#         f"[ПРОВАЛ: СЕТЬ] Сервер вернул ошибку {r.status_code}. Ссылка не ведет на файл или недоступна."
-#     )
-#     print(f"Детали: {e}")
+except requests.exceptions.HTTPError as e:
+    # Обработка 404, 500 и других HTTP-ошибок
+    print(
+        f"[ПРОВАЛ: СЕТЬ] Сервер вернул ошибку {r.status_code}. Ссылка не ведет на файл или недоступна."
+    )
+    print(f"Детали: {e}")
 
-# except UnidentifiedImageError:
-#     # Обработка случая, когда загруженные данные - не изображение
-#     print(
-#         f"[ПРОВАЛ: КОНТЕНТ] Данные загружены, но не являются распознаваемым изображением (вероятно, HTML-страница или поврежденный файл)."
-#     )
+except UnidentifiedImageError:
+    # Обработка случая, когда загруженные данные - не изображение
+    print(
+        f"[ПРОВАЛ: КОНТЕНТ] Данные загружены, но не являются распознаваемым изображением (вероятно, HTML-страница или поврежденный файл)."
+    )
 
-# except requests.exceptions.RequestException as e:
-#     # Обработка других сетевых ошибок (например, ConnectionError, Timeout)
-#     print(f"[ПРОВАЛ: СЕТЬ] Произошла ошибка соединения или таймаут: {e}")
+except requests.exceptions.RequestException as e:
+    # Обработка других сетевых ошибок (например, ConnectionError, Timeout)
+    print(f"[ПРОВАЛ: СЕТЬ] Произошла ошибка соединения или таймаут: {e}")
 
-# except Exception as e:
-#     # Общий обработчик для непредвиденных ошибок
-#     print(f"[ПРОВАЛ: НЕПРЕДВИДЕННАЯ] Произошла ошибка: {e}")
+except Exception as e:
+    print(f"[ПРОВАЛ: НЕПРЕДВИДЕННАЯ] Произошла ошибка: {e}")
 
 
 # * 2
@@ -47,7 +46,23 @@
 # статус код ответа. Если статус код равен 200, сайт считается доступным, и
 # вы выводите сообщение об этом. В противном случае, вы указываете в
 # сообщении, что сайт недоступен, и выводите соответствующий статус код
-#
+import requests
+
+try:
+    with open("urls.txt", encoding="utf8") as f:
+        urls = f.readlines()
+except FileNotFoundError:
+    print("File not found")
+except Exception as e:
+    print("Critical error", e)
+
+for site in urls:
+    site = site.rstrip("\n")
+    r = requests.get(site)
+    if r.status_code == 200:
+        print("Site is available")
+    else:
+        print(f"site is not not available, code {r.status_code}")
 
 # * 3
 # Вы — главный разработчик приложения для цитат из аниме. Вы решаете
@@ -57,70 +72,69 @@
 # Напишите программу, которая превратит ваш компьютер в сокровищницу аниме-
 # цитат! Каждый раз, когда вы запускаете программу, она будет выводить на
 # экран случайную и вдохновляющую цитату из самых известных аниме
-# import requests
-# import json
+import requests
+import json
 
-# TOKEN = "NTM2MTkwNTYzMDM3MjE2ODEw.MTc1OTgzMzUyOA--.e3ea59efda03"
-
-
-# url = "https://waifu.it/api/v4/quote"
-# response = requests.get(
-#     url,
-#     headers={
-#         "Authorization": TOKEN,
-#     },
-# )
-# data = response.json()
-
-# print(data["quote"])
-
-# input_string = data["quote"]
-
-# import random
-# from colorama import Fore, Style, init
-
-# # Инициализация Colorama для корректной работы на разных ОС (особенно Windows)
-# init(autoreset=True)
+TOKEN = "NTM2MTkwNTYzMDM3MjE2ODEw.MTc1OTgzMzUyOA--.e3ea59efda03"
 
 
-# def colorize_randomly(text):
-#     """
-#     Раскрашивает каждое слово в строке в случайный цвет, используя Colorama.
-#     """
-#     # 1. Список доступных цветов Fore (текст)
-#     # Исключаем BLACK и RESET, которые могут быть неразличимы или сбросят стиль
-#     available_colors = [
-#         Fore.RED,
-#         Fore.GREEN,
-#         Fore.YELLOW,
-#         Fore.BLUE,
-#         Fore.MAGENTA,
-#         Fore.CYAN,
-#         Fore.WHITE,
-#     ]
+url = "https://waifu.it/api/v4/quote"
+response = requests.get(
+    url,
+    headers={
+        "Authorization": TOKEN,
+    },
+)
+data = response.json()
 
-#     # 2. Разбиваем строку на слова
-#     words = text.split()
-#     colored_parts = []
+print(data["quote"])
 
-#     # 3. Перебираем слова и назначаем случайный цвет
-#     for word in words:
-#         # Выбираем случайный цвет из списка
-#         random_color = random.choice(available_colors)
+input_string = data["quote"]
 
-#         # Объединяем код цвета, слово и сброс стиля (Style.RESET_ALL)
-#         # init(autoreset=True) делает сброс автоматическим, но явное
-#         # использование гарантирует, что только это слово будет окрашено.
-#         colored_word = f"{random_color}{word}{Style.RESET_ALL}"
-#         colored_parts.append(colored_word)
+import random
+from colorama import Fore, Style, init
 
-#     # 4. Соединяем слова обратно в строку с пробелами
-#     return " ".join(colored_parts)
+init(autoreset=True)
 
 
-# colored_output = colorize_randomly(input_string)
+def colorize_randomly(text):
+    """
+    Раскрашивает каждое слово в строке в случайный цвет, используя Colorama.
+    """
+    # 1. Список доступных цветов Fore (текст)
+    # Исключаем BLACK и RESET, которые могут быть неразличимы или сбросят стиль
+    available_colors = [
+        Fore.RED,
+        Fore.GREEN,
+        Fore.YELLOW,
+        Fore.BLUE,
+        Fore.MAGENTA,
+        Fore.CYAN,
+        Fore.WHITE,
+    ]
 
-# print(colored_output)
+    # 2. Разбиваем строку на слова
+    words = text.split()
+    colored_parts = []
+
+    # 3. Перебираем слова и назначаем случайный цвет
+    for word in words:
+        # Выбираем случайный цвет из списка
+        random_color = random.choice(available_colors)
+
+        # Объединяем код цвета, слово и сброс стиля (Style.RESET_ALL)
+        # init(autoreset=True) делает сброс автоматическим, но явное
+        # использование гарантирует, что только это слово будет окрашено.
+        colored_word = f"{random_color}{word}{Style.RESET_ALL}"
+        colored_parts.append(colored_word)
+
+    # 4. Соединяем слова обратно в строку с пробелами
+    return " ".join(colored_parts)
+
+
+colored_output = colorize_randomly(input_string)
+
+print(colored_output)
 
 # * 4
 # Вы отправляетесь в увлекательное путешествие по всему миру в роли
@@ -133,48 +147,48 @@
 # связываться с [волшебным API погодного
 # сервиса](https://www.weatherapi.com/), чтобы достать самые точные и
 # надежные данные о погоде в указанном городе
-# import requests
-# import json
+import requests
+import json
 
-# API_KEY = "5549310096544d9292f141631250610"
-# city = input("Введите город: \n")
-# DAYS_COUNT = 3
-# API_URL = "https://api.weatherapi.com/v1/forecast.json"
+API_KEY = "5549310096544d9292f141631250610"
+city = input("Введите город: \n")
+DAYS_COUNT = 3
+API_URL = "https://api.weatherapi.com/v1/forecast.json"
 
-# params = {
-#     "key": API_KEY,
-#     "q": city,
-#     "days": DAYS_COUNT,
-#     "aqi": "no",  # Без данных о качестве воздуха
-#     "alerts": "no",  # Без погодных предупреждений
-#     "lang": "ru",  # На русском языке
-# }
+params = {
+    "key": API_KEY,
+    "q": city,
+    "days": DAYS_COUNT,
+    "aqi": "no",
+    "alerts": "no",
+    "lang": "ru",
+}
 
-# try:
-#     response = requests.get(API_URL, params=params)
-#     response.raise_for_status()
+try:
+    response = requests.get(API_URL, params=params)
+    response.raise_for_status()
 
-#     data = response.json()
+    data = response.json()
 
-#     current_temp = data["current"]["temp_c"]
-#     current_condition = data["current"]["condition"]["text"]
+    current_temp = data["current"]["temp_c"]
+    current_condition = data["current"]["condition"]["text"]
 
-#     tomorrow_forecast = data["forecast"]["forecastday"][1]["day"]
-#     max_temp_tomorrow = tomorrow_forecast["maxtemp_c"]
-#     min_temp_tomorrow = tomorrow_forecast["mintemp_c"]
+    tomorrow_forecast = data["forecast"]["forecastday"][1]["day"]
+    max_temp_tomorrow = tomorrow_forecast["maxtemp_c"]
+    min_temp_tomorrow = tomorrow_forecast["mintemp_c"]
 
-#     print(f"Город: {data['location']['name']}")
-#     print(f"Текущая температура: {current_temp}°C ({current_condition})")
-#     print(f"Прогноз на завтра:")
-#     print(f" Максимум: {max_temp_tomorrow}°C")
-#     print(f" Минимум: {min_temp_tomorrow}°C")
+    print(f"Город: {data['location']['name']}")
+    print(f"Текущая температура: {current_temp}°C ({current_condition})")
+    print(f"Прогноз на завтра:")
+    print(f" Максимум: {max_temp_tomorrow}°C")
+    print(f" Минимум: {min_temp_tomorrow}°C")
 
-# except requests.exceptions.RequestException as e:
-#     print(f"Ошибка запроса: Проверьте ключ, соединение и URL. Детали: {e}")
-# except KeyError:
-#     print(
-#         "Ошибка: Некорректный формат ответа JSON. Проверьте, что ключ верен и город найден."
-#     )
+except requests.exceptions.RequestException as e:
+    print(f"Ошибка запроса: Проверьте ключ, соединение и URL. Детали: {e}")
+except KeyError:
+    print(
+        "Ошибка: Некорректный формат ответа JSON. Проверьте, что ключ верен и город найден."
+    )
 
 # * 5
 
@@ -184,27 +198,25 @@
 # запрашивать у пользователя сумму в одной валюте и конвертировать ее в
 # другую валюту. Программа должна выполнить конвертацию с помощью сетевого
 # запроса к [API конвертера валют](https://freecurrencyapi.com/)
-# import requests
-# import pprint
+import requests
 
-# # выводит сколько 18 долларов будет в введеной валюте
-# API_KEY = "fca_live_oOcpldfAB02dOJBhZtKufu78rCnzMx4z6HmOfwyG"
-# try:
-#     user_summ = float(input("Введите сумму, которую хотите конвертировать\n"))
-# except ValueError:
-#     print("Введите сумму цифрами")
-# user_currency = input(
-#     "Введите трёхбуквенный алфавитный код валюты в формате ISO 4217\n"
-# ).upper()
-# r = requests.get(f"https://api.freecurrencyapi.com/v1/latest?apikey={API_KEY}")
-# data = r.json()
+API_KEY = "fca_live_oOcpldfAB02dOJBhZtKufu78rCnzMx4z6HmOfwyG"
+try:
+    user_summ = float(input("Введите сумму, которую хотите конвертировать\n"))
+except ValueError:
+    print("Введите сумму цифрами")
+user_currency = input(
+    "Введите трёхбуквенный алфавитный код валюты в формате ISO 4217\n"
+).upper()
+r = requests.get(f"https://api.freecurrencyapi.com/v1/latest?apikey={API_KEY}")
+data = r.json()
 
-# try:
-#     currency = data["data"][user_currency]
-# except KeyError:
-#     print("Введите верный код валюты")
-# else:
-#     print(f"{currency*user_summ:.2f}")
+try:
+    currency = data["data"][user_currency]
+except KeyError:
+    print("Введите верный код валюты")
+else:
+    print(f"{currency*user_summ:.2f}")
 
 
 # * 6
@@ -213,49 +225,48 @@
 # вы решили улучшить свою программу таким образом, чтобы она отображала
 # график, построенный с помощью matplotlib, отображающий прогноз погоды в
 # течение N дней (например, на неделю вперёд)
-# import requests
-# import matplotlib.pyplot as plt
+import requests
+import matplotlib.pyplot as plt
 
-# API_URL = "https://api.weatherapi.com/v1/forecast.json"
-# API_KEY = "5549310096544d9292f141631250610"
-# # * CITY = input("Введите город: \n")
-# CITY = "Moscow"
-# try:
-#     days_count = int(input("Введите количество дней, не более 14\n"))
-# except ValueError:
-#     print("Введено НЕ число")
-
-
-# params = {"key": API_KEY, "q": CITY, "days": days_count, "lang": "ru", "alerts": "yes"}
-
-# try:
-#     response = requests.get(API_URL, params=params)
-#     response.raise_for_status()
-#     data = response.json()
-
-# except requests.exceptions.RequestException as e:
-#     print(f"Ошибка запроса: Проверьте ключ, соединение и URL. Детали: {e}")
-# except KeyError:
-#     print(
-#         "Ошибка: Некорректный формат ответа JSON. Проверьте, что ключ верен и город найден."
-#     )
-# max_t = [
-#     data["forecast"]["forecastday"][x]["day"]["maxtemp_c"] for x in range(days_count)
-# ]
-# min_t = [
-#     data["forecast"]["forecastday"][x]["day"]["mintemp_c"] for x in range(days_count)
-# ]
+API_URL = "https://api.weatherapi.com/v1/forecast.json"
+API_KEY = "5549310096544d9292f141631250610"
+CITY = input("Введите город: \n")
+try:
+    days_count = int(input("Введите количество дней, не более 14\n"))
+except ValueError:
+    print("Введено НЕ число")
 
 
-# plt.figure()
-# plt.title("Погода на х дней: макс и мин")
-# plt.ylabel("t 'C")
-# plt.xlabel("День")
-# plt.plot(range(1, days_count + 1), max_t, "r-")
-# plt.plot(range(1, days_count + 1), min_t, "b--")
-# plt.yticks(ticks=range(20))
-# plt.grid()
-# plt.show()
+params = {"key": API_KEY, "q": CITY, "days": days_count, "lang": "ru", "alerts": "yes"}
+
+try:
+    response = requests.get(API_URL, params=params)
+    response.raise_for_status()
+    data = response.json()
+
+except requests.exceptions.RequestException as e:
+    print(f"Ошибка запроса: Проверьте ключ, соединение и URL. Детали: {e}")
+except KeyError:
+    print(
+        "Ошибка: Некорректный формат ответа JSON. Проверьте, что ключ верен и город найден."
+    )
+max_t = [
+    data["forecast"]["forecastday"][x]["day"]["maxtemp_c"] for x in range(days_count)
+]
+min_t = [
+    data["forecast"]["forecastday"][x]["day"]["mintemp_c"] for x in range(days_count)
+]
+
+
+plt.figure()
+plt.title("Погода на х дней: макс и мин")
+plt.ylabel("t 'C")
+plt.xlabel("День")
+plt.plot(range(1, days_count + 1), max_t, "r-")
+plt.plot(range(1, days_count + 1), min_t, "b--")
+plt.yticks(ticks=range(20))
+plt.grid()
+plt.show()
 
 
 # * Задача 7
@@ -268,98 +279,98 @@
 # 7 июля 2022 года будут сняты фотографии Земли. Используя свои программные
 # навыки и [NASA API](https://api.nasa.gov/), создайте специальную
 # программу для скачивания этих изображений и сохранения их в формате GIF.
-# ! shutdown ALRAM !
+# ! shutdown ALARM !
 
 
-# import requests
-# import io
-# from PIL import Image
+import requests
+import io
+from PIL import Image
 
-# # 1. КОНСТАНТЫ МИССИИ
-# # Базовый URL для получения списка снимков за дату
-# API_LIST_URL = "https://api.nasa.gov/EPIC/api/natural/date/2022-07-07"
-# # Базовый URL для скачивания самого изображения (JPEG)
-# IMAGE_BASE_URL = "https://api.nasa.gov/EPIC/archive/natural/2022/07/07/jpg/"
-# # Ваш API-ключ от NASA. Используйте 'DEMO_KEY' для тестирования.
-# NASA_API_KEY = "DEMO_KEY"
-# OUTPUT_FILENAME = "Earth_EPIC_20220707.gif"
-
-
-# def download_and_create_gif():
-#     """Загружает все изображения EPIC за 7 июля 2022 года и объединяет их в GIF."""
-
-#     print("--- Начало операции EPIC-Download ---")
-
-#     # Параметры запроса (API-ключ)
-#     params = {"api_key": NASA_API_KEY}
-
-#     # 1. Получение списка доступных снимков
-#     try:
-#         response = requests.get(API_LIST_URL, params=params)
-#         response.raise_for_status()
-#         image_data_list = response.json()
-#     except requests.exceptions.RequestException as e:
-#         print(f"❌ Ошибка при получении списка файлов: {e}")
-#         return
-
-#     if not image_data_list:
-#         print("⚠️ Не удалось найти снимки за 2022-07-07. Проверьте дату или API-ключ.")
-#         return
-
-#     print(f"✅ Найдено {len(image_data_list)} снимков. Начинаем загрузку...")
-
-#     downloaded_images = []
-
-#     # 2. Итерация и загрузка каждого снимка
-#     for item in image_data_list:
-#         # Имя файла извлекается из данных JSON
-#         file_name = item["image"] + ".jpg"
-
-#         # Полный URL для загрузки конкретного файла
-#         image_url = f"{IMAGE_BASE_URL}{file_name}"
-
-#         try:
-#             # Загрузка бинарных данных изображения
-#             img_response = requests.get(image_url, params=params)
-#             img_response.raise_for_status()
-
-#             # Чтение данных в объект BytesIO в памяти
-#             image_stream = io.BytesIO(img_response.content)
-
-#             # Открытие изображения с помощью Pillow
-#             img = Image.open(image_stream)
-#             downloaded_images.append(img)
-#             print(f"   Загружено: {file_name}")
-
-#         except (requests.exceptions.RequestException, IOError) as e:
-#             print(f"   ❌ Ошибка при загрузке {file_name}: {e}")
-#             continue
-
-#     if not downloaded_images:
-#         print("❌ Не удалось загрузить ни одного изображения.")
-#         return
-
-#     # 3. Создание GIF-анимации
-#     print("🔄 Объединение снимков в GIF-анимацию...")
-
-#     # Берем первое изображение как основу
-#     first_image = downloaded_images[0]
-
-#     # Сохраняем в формате GIF. duration=200 - задержка в миллисекундах между кадрами.
-#     first_image.save(
-#         OUTPUT_FILENAME,
-#         save_all=True,
-#         append_images=downloaded_images[1:],
-#         duration=200,
-#         loop=0,  # 0 означает бесконечный цикл
-#     )
-
-#     print(f"🎉 Миссия выполнена! Файл GIF сохранен как: {OUTPUT_FILENAME}")
-#     print("Теперь вы можете увидеть Землю в движении, молодой ученый!")
+# 1. КОНСТАНТЫ МИССИИ
+# Базовый URL для получения списка снимков за дату
+API_LIST_URL = "https://api.nasa.gov/EPIC/api/natural/date/2022-07-07"
+# Базовый URL для скачивания самого изображения (JPEG)
+IMAGE_BASE_URL = "https://api.nasa.gov/EPIC/archive/natural/2022/07/07/jpg/"
+# Ваш API-ключ от NASA. Используйте 'DEMO_KEY' для тестирования.
+NASA_API_KEY = "DEMO_KEY"
+OUTPUT_FILENAME = "Earth_EPIC_20220707.gif"
 
 
-# if __name__ == "__main__":
-#     download_and_create_gif()
+def download_and_create_gif():
+    """Загружает все изображения EPIC за 7 июля 2022 года и объединяет их в GIF."""
+
+    print("--- Начало операции EPIC-Download ---")
+
+    # Параметры запроса (API-ключ)
+    params = {"api_key": NASA_API_KEY}
+
+    # 1. Получение списка доступных снимков
+    try:
+        response = requests.get(API_LIST_URL, params=params)
+        response.raise_for_status()
+        image_data_list = response.json()
+    except requests.exceptions.RequestException as e:
+        print(f"❌ Ошибка при получении списка файлов: {e}")
+        return
+
+    if not image_data_list:
+        print("⚠️ Не удалось найти снимки за 2022-07-07. Проверьте дату или API-ключ.")
+        return
+
+    print(f"✅ Найдено {len(image_data_list)} снимков. Начинаем загрузку...")
+
+    downloaded_images = []
+
+    # 2. Итерация и загрузка каждого снимка
+    for item in image_data_list:
+        # Имя файла извлекается из данных JSON
+        file_name = item["image"] + ".jpg"
+
+        # Полный URL для загрузки конкретного файла
+        image_url = f"{IMAGE_BASE_URL}{file_name}"
+
+        try:
+            # Загрузка бинарных данных изображения
+            img_response = requests.get(image_url, params=params)
+            img_response.raise_for_status()
+
+            # Чтение данных в объект BytesIO в памяти
+            image_stream = io.BytesIO(img_response.content)
+
+            # Открытие изображения с помощью Pillow
+            img = Image.open(image_stream)
+            downloaded_images.append(img)
+            print(f"   Загружено: {file_name}")
+
+        except (requests.exceptions.RequestException, IOError) as e:
+            print(f"   ❌ Ошибка при загрузке {file_name}: {e}")
+            continue
+
+    if not downloaded_images:
+        print("❌ Не удалось загрузить ни одного изображения.")
+        return
+
+    # 3. Создание GIF-анимации
+    print("🔄 Объединение снимков в GIF-анимацию...")
+
+    # Берем первое изображение как основу
+    first_image = downloaded_images[0]
+
+    # Сохраняем в формате GIF. duration=200 - задержка в миллисекундах между кадрами.
+    first_image.save(
+        OUTPUT_FILENAME,
+        save_all=True,
+        append_images=downloaded_images[1:],
+        duration=200,
+        loop=0,  # 0 означает бесконечный цикл
+    )
+
+    print(f"🎉 Миссия выполнена! Файл GIF сохранен как: {OUTPUT_FILENAME}")
+    print("Теперь вы можете увидеть Землю в движении, молодой ученый!")
+
+
+if __name__ == "__main__":
+    download_and_create_gif()
 
 
 # * 8
@@ -371,3 +382,73 @@ r = requests.get(f"http://ip-api.com/json/{IP}")
 data = r.json()
 m = folium.Map(location=(data["lat"], data["lon"]))
 m.save("index.html")
+
+
+# * 9
+import base64
+import requests
+import json
+import time
+
+API_KEY = "544CFCD6EC19E733B1F14439D0E603DC"
+SECRET_KEY = "51E0F796DEEB56A83FADE4114DD7514B"
+
+
+class FusionBrainAPI:
+
+    def __init__(self, url, api_key, secret_key):
+        self.URL = url
+        self.AUTH_HEADERS = {
+            "X-Key": f"Key {API_KEY}",
+            "X-Secret": f"Secret {SECRET_KEY}",
+        }
+
+    def get_pipeline(self):
+        response = requests.get(
+            self.URL + "key/api/v1/pipelines", headers=self.AUTH_HEADERS
+        )
+        data = response.json()
+        return data[0]["id"]
+
+    def generate(self, prompt, pipeline_id, images=1, width=1024, height=1024):
+        params = {
+            "type": "GENERATE",
+            "numImages": images,
+            "width": width,
+            "height": height,
+            "generateParams": {"query": f"{prompt}"},
+        }
+
+        data = {
+            "pipeline_id": (None, pipeline_id),
+            "params": (None, json.dumps(params), "application/json"),
+        }
+        response = requests.post(
+            self.URL + "key/api/v1/pipeline/run", headers=self.AUTH_HEADERS, files=data
+        )
+        data = response.json()
+        return data["uuid"]
+
+    def check_generation(self, request_id, attempts=10, delay=10):
+        while attempts > 0:
+            response = requests.get(
+                self.URL + "key/api/v1/pipeline/status/" + request_id,
+                headers=self.AUTH_HEADERS,
+            )
+            data = response.json()
+            if data["status"] == "DONE":
+                return data["result"]["files"]
+
+            attempts -= 1
+            time.sleep(delay)
+
+
+if __name__ == "__main__":
+    api = FusionBrainAPI("https://api-key.fusionbrain.ai/", API_KEY, SECRET_KEY)
+    pipeline_id = api.get_pipeline()
+    uuid = api.generate("Битва Таноса и Винни-Пуха", pipeline_id)
+    images = api.check_generation(uuid)
+    image_base64 = images[0]
+    image_data = base64.b64decode(image_base64)
+    with open("image.jpg", "wb") as file:
+        file.write(image_data)
