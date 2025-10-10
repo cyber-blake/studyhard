@@ -1,0 +1,58 @@
+body {
+    background-image: url(images/istockphoto-1331291706-612x612.jpg);
+    font-family: 'Montserrat', Arial, sans-serif;
+    font-weight: 600;
+    font-size: 20px;
+
+}
+
+div {
+    background-color: #2e2e2e;
+}
+h1 {
+    color: #ebebeb;
+    font-size: 50px;
+    background-color: #2e2e2e;
+    border: 1px solid rgb(0, 0, 0)
+    
+}
+span { 
+    color: #ebebeb;
+    font-size: 40px;
+    background-color: #2e2e2e;
+    border: 1px solid rgb(0, 0, 0)
+    
+}
+a:visited {
+  color: #c1c1c1;
+  text-decoration-color: #18142f;
+}
+
+.start { 
+    padding-right: 10px;
+    font-size: 30px;
+    border: 2px solid rgb(0, 0, 0)
+}
+.start:hover {
+    background-color: rgb(89, 99, 110);
+
+}
+.styled-box {
+    background-color: #2e2e2e; 
+    background-image: url(images/black1.jpg);
+    padding: 10px 20px;
+    border: 1px solid #999;
+}
+
+.label-text {
+    color: #ebebeb; /* Белый текст */
+    font-weight: 600; /* Полужирный */
+    font-size: x-large;
+    line-height: 1.5;
+    margin: 0; /* Убираем стандартные отступы параграфа */
+}
+
+
+table {
+    width: 80vw;
+}
