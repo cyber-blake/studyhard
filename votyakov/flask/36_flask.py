@@ -36,10 +36,15 @@ def api_convert():
 
 
 # * 3
+r = dict()
+big_dict = dict()
+
+
 @app.route("/tasks", methods=["GET", "POST"])
 def tasks():
+    global r
+    global big_dict
     if request.method == "GET":
-        global r
         return r
     elif request.method == "POST":
         global task_id
@@ -48,35 +53,33 @@ def tasks():
         r["title"] = data["title"]
         r["description"] = data["description"]
         r["task_id"] = task_id
+        big_dict.update({"task_id": r["task_id"]})
         return (r, 200, {"content-type": "application/json"})
 
 
-@app.route("/task/<int:task_id>", methods=["GET", "POST"])
+@app.route("/tasks/<int:task_id>", methods=["DELETE"])
 def get_task(task_id):
-    if request.method == "GET":
-        title = request.args.get["title"]
-        description = request.args.get["description"]
-        return f"task number {task_id}"
-
-    elif request.method == "POST":
-        data = request.json
-        r["title"] = data["title"]
-        r["description"] = data["description"]
-        return (r, 200, {"content-type": "application/json"})
+    global r
+    # data = request.json
+    r.pop("task_id")
+    return (
+        {"message": "Задача успешно удалена"},
+        200,
+        {"content-type": "application/json"},
+    )
 
 
-# POST ->
-# {
-#     "title": "Покормить кота",
-#     "description": "Надо купить ему Whiskas или Purina, а то будет опять злой"
-# }
+@app.route("/debug", methods=["POST"])
+def debug_request():
+    print("=== HEADERS ===")
+    print(dict(request.headers))
 
-# # return: <- f'{
-#     "description": "Надо купить ему Whiskas или Purina, а то будет опять
-#     злой",
-#     "task_id": 1,
-#     "title": "Покормить кота"
-# }'
+    print("=== JSON DATA ===")
+    print(
+        request.get_json(silent=True)
+    )  # silent=True чтобы не было ошибок если не JSON
+    return "<h1>alles normales</h1>"
+
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
