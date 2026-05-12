@@ -182,13 +182,13 @@ class BankOperation(BankAccount):
         print(*self.op_history, sep="\n")
 
 
-# account = BankOperation("Warren Buffett", 113000000000, 0.08)
-# account.__str__()
-# account.deposit(4000000000)
-# account.withdraw(88000000000)
-# account.add_interest()
-# account.history()
-# print(account)
+account = BankOperation("Warren Buffett", 113000000000, 0.08)
+account.__str__()
+account.deposit(4000000000)
+account.withdraw(88000000000)
+account.add_interest()
+account.history()
+print(account)
 # ! раскодировать перед сдачей
 
 
